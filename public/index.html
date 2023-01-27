@@ -1,0 +1,56 @@
+<!--
+  This page will load when the app starts. It will give the user the option to geo-locate and begin a
+  session with other players or simply go to the play page and tase someone as a prank. This page is 
+  intended for Jeff to review 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Spark-Fun</title>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="Play.html">Play</a></li>
+      </ul>
+    </nav>
+    <h1>Spark-Fun</h1>
+    <p>
+      Lat: <span id="latitude"></span>
+      Lon: <span id="longitude"></span>
+    </p>
+    <button id="tase" onClick=buzz()>TASE</button><br>
+    <span id="showBuzz"></span>
+    
+    <script>
+      // Get and display the user's position using the navigator watchID object. This allows 
+      // for continuous geolocation
+      if ("geolocation" in navigator) {
+          console.log('Geolocation is available');
+          const watchId = navigator.geolocation.watchPosition(position => {
+          // Create an object containing latitude and longitude properties of the navigator.geolocation object  
+          const { latitude, longitude } = position.coords;
+          // Show a map centered at latitude / longitude here
+          // For now, set to dom elements
+          document.getElementById('latitude').textContent = latitude;
+          document.getElementById('longitude').textContent = longitude;
+        });
+      }
+      else {
+        console.log('Geolocation IS NOT available');
+      }
+
+      // This function will handle events when the taser button is pressed. Events include animation of taser
+      // as well as accessing components of mobile devices including speaker, vibrate, and flashlight.
+      function buzz() {
+        document.getElementById('showBuzz').textContent ='buzz';
+      }
+    </script>
+  </body>
+</html>
+
