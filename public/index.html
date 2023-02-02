@@ -24,13 +24,18 @@
       Lat: <span id="latitude"></span>
       Lon: <span id="longitude"></span>
     </p>
+ 
     <button id="tase" onclick=buzz()>TASE</button><br>
     <span id="showBuzz"></span>
+
+    <button id="find-me">Show my location</button><br />
+    <p id="status"></p>
+    <a id="map-link" target="_blank"></a>
     
     <script>
       // Get and display the user's position using the navigator watchID object. This allows 
       // for continuous geolocation
-      if ("geolocation" in navigator) {
+      /*if ("geolocation" in navigator) {
           console.log('Geolocation is available');
           const watchId = navigator.geolocation.watchPosition(position => {
           // Create an object containing latitude and longitude properties of the navigator.geolocation object  
@@ -43,8 +48,40 @@
       }
       else {
         console.log('Geolocation IS NOT available');
+      }*/
+
+      function geoFindMe() {
+
+        const status = document.querySelector('#status');
+        const mapLink = document.querySelector('#map-link');
+
+        mapLink.href = '';
+        mapLink.textContent = '';
+
+        function success(position) {
+          const latitude  = position.coords.latitude;
+          const longitude = position.coords.longitude;
+
+          status.textContent = '';
+          mapLink.href = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
+          mapLink.textContent = `Latitude: ${latitude} °, Longitude: ${longitude} °`;
+        }
+
+        function error() {
+          status.textContent = 'Unable to retrieve your location';
+        }
+
+        if (!navigator.geolocation) {
+          status.textContent = 'Geolocation is not supported by your browser';
+        } else {
+          status.textContent = 'Locating…';
+          navigator.geolocation.getCurrentPosition(success, error);
+        }
+
       }
 
+      document.querySelector('#find-me').addEventListener('click', geoFindMe);
+      
       // This function will handle events when the taser button is pressed. Events include animation of taser
       // as well as accessing components of mobile devices including speaker, vibrate, and flashlight.
       function buzz() {
