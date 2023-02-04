@@ -20,72 +20,53 @@
       </ul>
     </nav>
     <h1>Spark-Fun</h1>
-    <p>
-      Lat: <span id="latitude"></span>
+    <div>
+      <button id="find-me" onclick="findMyLocation()">Show my location</button><br>
+      <span id="status"></span><br>
+      Lat: <span id="latitude"></span><br>
       Lon: <span id="longitude"></span>
-    </p>
- 
-    <button id="tase" onclick=buzz()>TASE</button><br>
-    <span id="showBuzz"></span>
-
-    <button id="find-me">Show my location</button><br />
-    <p id="status"></p>
-    <a id="map-link" target="_blank"></a>
+    </div><br>
+    <div>
+      <button id="tase" onclick="buzz()">Tase</button><br>
+      <span id="showBuzz"></span><br>
+    </div>
     
-    <script>
-      // Get and display the user's position using the navigator watchID object. This allows 
-      // for continuous geolocation
-      /*if ("geolocation" in navigator) {
-          console.log('Geolocation is available');
-          const watchId = navigator.geolocation.watchPosition(position => {
-          // Create an object containing latitude and longitude properties of the navigator.geolocation object  
-          const { latitude, longitude } = position.coords;
-          // Show a map centered at latitude / longitude here
-          // For now, set to dom elements
-          document.getElementById('latitude').textContent = latitude;
-          document.getElementById('longitude').textContent = longitude;
-        });
-      }
-      else {
-        console.log('Geolocation IS NOT available');
-      }*/
+    <script>    
+      function findMyLocation() {
 
-      function geoFindMe() {
-
-        const status = document.querySelector('#status');
-        const mapLink = document.querySelector('#map-link');
-
-        mapLink.href = '';
-        mapLink.textContent = '';
+        if (!navigator.geolocation) {
+          document.getElementById('status').textContent = 'Geolocation is not supported by your browser';
+        } else {
+          document.getElementById('status').textContent = 'Locating…';
+        }
 
         function success(position) {
           const latitude  = position.coords.latitude;
           const longitude = position.coords.longitude;
 
-          status.textContent = '';
-          mapLink.href = `https://www.openstreetmap.org/#map=18/${latitude}/${longitude}`;
-          mapLink.textContent = `Latitude: ${latitude} °, Longitude: ${longitude} °`;
+          document.getElementById('status').textContent = '';
+          document.getElementById('latitude').textContent = latitude;
+          document.getElementById('longitude').textContent = longitude; 
         }
 
         function error() {
-          status.textContent = 'Unable to retrieve your location';
+          document.getElementById('status').textContent = 'Unable to retrieve your location';
         }
 
-        if (!navigator.geolocation) {
-          status.textContent = 'Geolocation is not supported by your browser';
-        } else {
-          status.textContent = 'Locating…';
-          navigator.geolocation.getCurrentPosition(success, error);
-        }
+        const options = {
+          enableHighAccuracy: true,
+          maximumAge: 30000,
+          timeout: 27000
+        };
+
+        const watchId = navigator.geolocation.watchPosition(success, error, options);
 
       }
-
-      document.querySelector('#find-me').addEventListener('click', geoFindMe);
       
       // This function will handle events when the taser button is pressed. Events include animation of taser
       // as well as accessing components of mobile devices including speaker, vibrate, and flashlight.
       function buzz() {
-        document.getElementById('showBuzz').textContent ='buzz';
+        document.getElementById('showBuzz').textContent = 'Buzz';
       }
     </script>
   </body>
